@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 """This module defines the BaseModel class."""
-
 import uuid
 from datetime import datetime
-
 
 class BaseModel:
     """This class defines common attributes/methods for other classes."""
@@ -37,8 +35,3 @@ class BaseModel:
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
-
-
-if __name__ == '__main__':
-    instance = BaseModel()
-    print(instance)
