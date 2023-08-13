@@ -3,6 +3,7 @@
 import shlex
 import sys
 from models.base_model import BaseModel
+from models import storage
 
 
 class HBNBCommand:
@@ -33,9 +34,108 @@ class HBNBCommand:
             if command == "help":
                 print("Documented commands (type help <topic>):")
                 print("========================================")
-                print("help  quit")
+                print("help  quit  create  show  destroy  all  update")
             else:
                 print("*** Unknown syntax: {}".format(command))
+
+    def do_create(self, arg):
+        """Create a new instance of BaseModel, save it to JSON file, and print its id."""
+        if len(arg) == 0:
+            print("** class name missing **")
+            return
+        class_name = arg[0]
+        if class_name not in storage.classes:
+            print("** class doesn't exist **")
+            return
+        new_instance = storage.classes[class_name]()
+        new_instance.save()
+        print(new_instance.id)
+
+    def do_show(self, arg):
+        """Print the string representation of an instance based on the class name and id."""
+        if len(arg) == 0:
+            print("** class name missing **")
+            return
+        class_name = arg[0]
+        if class_name not in storage.classes:
+            print("** class doesn't exist **")
+            return
+        if len(arg) < 2:
+            print("** instance id missing **")
+            return
+        instance_id = arg[1]
+        key = class_name + "." + instance_id
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+        print(storage.all()[key])
+
+    def do_destroy(self, arg):
+        """Deletes an instance based on the class name and id (save the change into the JSON file)."""
+        if len(arg) == 0:
+            print("** class name missing **")
+            return
+        class_name = arg[0]
+        if class_name not in storage.classes:
+            print("** class doesn't exist **")
+            return
+        if len(arg) < 2:
+            print("** instance id missing **")
+            return
+        instance_id = arg[1]
+        key = class_name + "." + instance_id
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+        storage.all().pop(key)
+        storage.save()
+
+    def do_all(self, arg):
+        """Prints all string representation of all instances based on the class name or all classes."""
+        if len(arg) == 0:
+            instance_list = []
+            for key in storage.all():
+                instance_list.append(str(storage.all()[key]))
+            print(instance_list)
+            return
+        class_name = arg[0]
+        if class_name not in storage.classes:
+            print("** class doesn't exist **")
+            return
+        instance_list = []
+        for key in storage.all():
+            if key.split('.')[0] == class_name:
+                instance_list.append(str(storage.all()[key]))
+        print(instance_list)
+
+    def do_update(self, arg):
+        """Updates an instance based on the class name and id by adding or updating attributes."""
+        if len(arg) == 0:
+            print("** class name missing **")
+            return
+        class_name = arg[0]
+        if class_name not in storage.classes:
+            print("** class doesn't exist **")
+            return
+        if len(arg) < 2:
+            print("** instance id missing **")
+            return
+        instance_id = arg[1]
+        key = class_name + "." + instance_id
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+        if len(arg) < 3:
+            print("** attribute name missing **")
+            return
+        attribute_name = arg[2]
+        if len(arg) < 4:
+            print("** value missing **")
+            return
+        attribute_value = arg[3]
+        instance = storage.all()[key]
+        setattr(instance, attribute_name, attribute_value)
+        instance.save()
 
     def run(self):
         """Run the command processor"""
