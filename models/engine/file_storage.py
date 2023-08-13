@@ -9,10 +9,14 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
+    classes = []  # Add this attribute to store class names
 
-    def all(self):
-        """Return the dictionary __objects."""
-        return self.__objects
+    def all(self, cls=None):
+        """Return a list of objects of a specific class or all objects."""
+        if cls:
+            return {key: obj for key, obj in self.__objects.items() if isinstance(obj, cls)}
+        else:
+            return self.__objects
 
     def new(self, obj):
         """Set in __objects the obj with key <obj class name>.id."""
@@ -34,5 +38,8 @@ class FileStorage:
                     cls_name, obj_id = key.split(".")
                     cls = globals()[cls_name]
                     self.__objects[key] = cls(**value)
+                    if cls_name not in self.classes:
+                        self.classes.append(cls_name)  # Update the classes list
         except FileNotFoundError:
             pass
+
