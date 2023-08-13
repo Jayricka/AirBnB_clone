@@ -1,9 +1,6 @@
-#!/usr/bin/python3
-from models.engine.file_storage import FileStorage
+import os
+from models import storage
 from models.base_model import BaseModel
-
-storage = FileStorage()  # Create an instance of FileStorage
-storage.reload()         # Load objects from file if available
 
 all_objs = storage.all()
 print("-- Reloaded objects --")
@@ -15,5 +12,16 @@ print("-- Create a new object --")
 my_model = BaseModel()
 my_model.name = "My_First_Model"
 my_model.my_number = 89
-my_model.save()
+my_model.save()  # Save the new object
 print(my_model)
+
+# Ensure the object is saved to file.json
+storage.save()
+
+# Construct the absolute path to file.json using os.path.join
+file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../file.json")
+
+# Print the contents of file.json
+with open(file_path, "r") as json_file:
+    print(json_file.read())
+

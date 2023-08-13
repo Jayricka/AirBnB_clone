@@ -2,7 +2,7 @@
 """This module defines the BaseModel class."""
 import uuid
 from datetime import datetime
-
+from models import storage  # Import storage from models package
 
 class BaseModel:
     """This class defines common attributes/methods for other classes."""
@@ -28,6 +28,7 @@ class BaseModel:
     def save(self):
         """Update the public instance attribute current datetime."""
         self.updated_at = datetime.now()
+        storage.save()  # Call the save method from the storage instance
 
     def to_dict(self):
         """Return a dictionary representation of the BaseModel instance."""
