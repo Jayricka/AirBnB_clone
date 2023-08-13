@@ -4,6 +4,7 @@ import shlex
 import sys
 from models.base_model import BaseModel
 
+
 class HBNBCommand:
     """Simple command processor example."""
 
@@ -63,6 +64,7 @@ class HBNBCommand:
             else:
                 self.default(line)
 
+
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == "-c":
         hbnb = HBNBCommand(stdout=sys.stdout)
@@ -77,6 +79,6 @@ def main():
         hbnb = HBNBCommand(stdout=sys.stdout)
         hbnb.run()
 
+
 if __name__ == '__main__':
     main()
-
