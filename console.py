@@ -82,15 +82,19 @@ class HBNBCommand(cmd.Cmd):
         key = "{}.{}".format(args_list[0], args_list[1])
         objects = storage.all()
         if key in objects:
-            if len(args_list) < 3:
+            if len(args_list) < 4:
                 print("** attribute name missing **")
                 return
-            if len(args_list) < 4:
+            if len(args_list) < 5:
                 print("** value missing **")
                 return
-            attr_name = args_list[2]
-            attr_value = args_list[3]
+            attr_name = args_list[3]
+            attr_value = args_list[4]
             obj = objects[key]
+            try:
+                attr_value = eval(attr_value)
+            except:
+                pass
             setattr(obj, attr_name, attr_value)
             storage.save()
         else:
@@ -119,4 +123,3 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
-
