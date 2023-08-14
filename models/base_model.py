@@ -3,6 +3,7 @@
 import uuid
 from datetime import datetime
 from models import storage  # Import storage from models package
+from uuid import uuid4  # Import uuid4 from the uuid module
 
 class BaseModel:
     """This class defines common attributes/methods for other classes."""
@@ -17,7 +18,7 @@ class BaseModel:
                 elif key != '__class__':
                     setattr(self, key, value)
         else:
-            self.id = str(uuid.uuid4())
+            self.id = str(uuid4())  # Generate a unique ID using uuid4
             self.created_at = self.updated_at = datetime.now()
 
     def __str__(self):
