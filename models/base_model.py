@@ -2,8 +2,6 @@
 """This module defines the BaseModel class."""
 import uuid
 from datetime import datetime
-from models import storage  # Import storage from models package
-from uuid import uuid4  # Import uuid4 from the uuid module
 
 class BaseModel:
     """This class defines common attributes/methods for other classes."""
@@ -18,7 +16,7 @@ class BaseModel:
                 elif key != '__class__':
                     setattr(self, key, value)
         else:
-            self.id = str(uuid4())  # Generate a unique ID using uuid4
+            self.id = str(uuid.uuid4())  # Generate a unique ID using uuid4 and convert to a string
             self.created_at = self.updated_at = datetime.now()
 
     def __str__(self):
@@ -28,6 +26,7 @@ class BaseModel:
 
     def save(self):
         """Update the public instance attribute current datetime."""
+        from models import storage  # Import storage here
         self.updated_at = datetime.now()
         storage.save()  # Call the save method from the storage instance
 
@@ -38,3 +37,4 @@ class BaseModel:
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
+
