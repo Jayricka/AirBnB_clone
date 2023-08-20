@@ -5,7 +5,7 @@ import re
 from shlex import split
 from models import storage
 from models.base_model import BaseModel
-from datetime import datetime
+
 
 def parse_arg(arg):
     curly_braces = re.search(r"\{(.*?)\}", arg)
@@ -23,6 +23,7 @@ def parse_arg(arg):
         retl = [i.strip(",") for i in lexer]
         retl.append(curly_braces.group())
         return retl
+
 
 class HBNBCommand(cmd.Cmd):
     """Command line interpreter for AirBnB Clone"""
@@ -139,13 +140,11 @@ class HBNBCommand(cmd.Cmd):
         argl = parse_arg(arg)
         objdict = storage.all()
         if not argl:
-            print("** class name missing **")
+            print(len(objdict))
         elif argl[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
         else:
-            class_name = argl[0]
-            count = len([obj for obj in objdict.values() if obj.__class__.__name__ == class_name])
-            print(count)
+            print(len([obj for obj in objdict.values() if obj.__class__.__name__ == argl[0]]))
 
     def do_update(self, arg):
         """Usage: update <class> <id> <attribute_name> <attribute_value> or
@@ -155,26 +154,29 @@ class HBNBCommand(cmd.Cmd):
         a given attribute key/value pair or dictionary."""
         argl = parse_arg(arg)
         objdict = storage.all()
-        if not argl:
+        if len(argl) < 2:
             print("** class name missing **")
-        elif argl[0] not in HBNBCommand.__classes:
+            return False
+        if argl[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
-        elif len(argl) < 2:
+            return False
+        if len(argl) < 3:
             print("** instance id missing **")
-        else:
-            key = "{}.{}".format(argl[0], argl[1])
-            obj = objdict.get(key)
-            if obj:
-                if len(argl) < 3:
-                    print("** attribute name missing **")
-                elif len(argl) < 4:
-                    print("** value missing **")
-                else:
-                    setattr(obj, argl[2], argl[3])
-                    obj.updated_at = datetime.now()
-                    storage.save()
-            else:
-                print("** no instance found **")
+            return False
+        key = "{}.{}".format(argl[0], argl[1])
+        obj = objdict.get(key)
+        if not obj:
+            print("** no instance found **")
+            return False
+        if len(argl) < 4:
+            print("** attribute name missing **")
+            return False
+        if len(argl) < 5:
+            print("** value missing **")
+            return False
+        setattr(obj, argl[3], argl[4])
+        obj.save()
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
