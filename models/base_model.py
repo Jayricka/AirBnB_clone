@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 """This module defines the BaseModel class."""
+
 import uuid
 from datetime import datetime
+import models
 
 class BaseModel:
     """This class defines common attributes/methods for other classes."""
@@ -31,4 +33,36 @@ class BaseModel:
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
+
+    def save(self):
+        """Save the current instance's data to the storage engine."""
+        models.storage.new(self)
+        models.storage.save()
+
+    def delete(self):
+        """Remove the current instance's data from the storage engine."""
+        models.storage.delete(self)
+
+    @classmethod
+    def all(cls):
+        """Return a dictionary of all instances."""
+        return models.storage.all(cls)
+
+    @classmethod
+    def count(cls):
+        """Return the number of instances in storage."""
+        return models.storage.count(cls)
+
+    @classmethod
+    def find_by_id(cls, id):
+        """Find an instance by its ID."""
+        return models.storage.find(cls, id)
+
+    @classmethod
+    def find(cls, **kwargs):
+        """Find instances that match the given criteria."""
+        return models.storage.find(cls, **kwargs)
+
+if __name__ == "__main__":
+    pass
 
