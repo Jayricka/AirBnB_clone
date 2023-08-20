@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """This module defines a User class that inherits from BaseModel."""
+
 from models.base_model import BaseModel
-from models import storage  # Import storage from models package
 
 class User(BaseModel):
     """Class representing a user."""
@@ -19,7 +19,8 @@ class User(BaseModel):
         return "[User] ({}) {}".format(self.id, self.__dict__)
 
     def save(self):
-        """Update the public instance attribute current datetime."""
+        """Update the public instance attribute current datetime.""
+	from models import storage  # Import storage here
         self.updated_at = datetime.now()
         storage.save()  # Call the save method from the storage instance
 

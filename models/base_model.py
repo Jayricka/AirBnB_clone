@@ -24,12 +24,6 @@ class BaseModel:
         return "[{}] ({}) {}".format(
             self.__class__.__name__, self.id, self.__dict__)
 
-    def save(self):
-        """Update the public instance attribute current datetime."""
-        from models import storage  # Import storage here
-        self.updated_at = datetime.now()
-        storage.save()  # Call the save method from the storage instance
-
     def to_dict(self):
         """Return a dictionary representation of the BaseModel instance."""
         obj_dict = self.__dict__.copy()

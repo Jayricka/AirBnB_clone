@@ -1,8 +1,6 @@
-#!/usr/bin/python3
-"""Place module"""
-
+from datetime import datetime
 from models.base_model import BaseModel
-from models import storage  # Import storage from models package
+import models
 
 class Place(BaseModel):
     """Place class that inherits from BaseModel"""
@@ -29,6 +27,7 @@ class Place(BaseModel):
 
     def save(self):
         """Update the public instance attribute current datetime."""
+        from models import storage  # Import storage here
         self.updated_at = datetime.now()
         storage.save()  # Call the save method from the storage instance
 
@@ -39,3 +38,4 @@ class Place(BaseModel):
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
+

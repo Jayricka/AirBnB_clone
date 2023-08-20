@@ -12,7 +12,7 @@ class HBNBCommand(cmd.Cmd):
     valid_classes = ["BaseModel", "State", "City", "Amenity", "Place", "Review", "User"]
 
     def do_create(self, args):
-        """Create a new instance of BaseModel and save to JSON file"""
+        """Create a new instance of BaseModel and save it to JSON file"""
         if not args:
             print("** class name missing **")
             return
