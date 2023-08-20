@@ -10,6 +10,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 
+
 class FileStorage:
     """FileStorage class"""
 
@@ -41,6 +42,6 @@ class FileStorage:
                     obj = eval(class_name + "(**value)")
                     self.__objects[key] = obj
 
+
 storage = FileStorage()
 storage.reload()
-

@@ -2,6 +2,7 @@ from datetime import datetime
 from models.base_model import BaseModel
 import models
 
+
 class Amenity(BaseModel):
     """Amenity class that inherits from BaseModel"""
     name = ""
@@ -28,4 +29,3 @@ class Amenity(BaseModel):
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
-

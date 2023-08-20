@@ -2,9 +2,12 @@
 """This module defines a User class that inherits from BaseModel."""
 
 from models.base_model import BaseModel
+from datetime import datetime
+
 
 class User(BaseModel):
     """Class representing a user."""
+
     email = ""
     password = ""
     first_name = ""
@@ -19,8 +22,8 @@ class User(BaseModel):
         return "[User] ({}) {}".format(self.id, self.__dict__)
 
     def save(self):
-        """Update the public instance attribute current datetime.""
-	from models import storage  # Import storage here
+        """Update the public instance attribute current datetime."""
+        from models import storage  # Import storage here
         self.updated_at = datetime.now()
         storage.save()  # Call the save method from the storage instance
 
@@ -31,7 +34,3 @@ class User(BaseModel):
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
-
-# To avoid circular import issues during deserialization
-# between User and BaseModel, we import BaseModel at the end.
-from models.base_model import BaseModel

@@ -4,6 +4,7 @@
 from models.base_model import BaseModel
 from datetime import datetime
 
+
 class State(BaseModel):
     """State class that inherits from BaseModel"""
     name = ""
@@ -23,4 +24,3 @@ class State(BaseModel):
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
-

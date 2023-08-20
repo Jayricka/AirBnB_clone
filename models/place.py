@@ -2,6 +2,7 @@ from datetime import datetime
 from models.base_model import BaseModel
 import models
 
+
 class Place(BaseModel):
     """Place class that inherits from BaseModel"""
     city_id = ""
@@ -38,4 +39,3 @@ class Place(BaseModel):
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
-

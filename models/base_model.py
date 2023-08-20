@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """This module defines the BaseModel class."""
-
 import uuid
 from datetime import datetime
 import models
+
 
 class BaseModel:
     """This class defines common attributes/methods for other classes."""
@@ -13,12 +13,13 @@ class BaseModel:
         if kwargs:
             for key, value in kwargs.items():
                 if key == 'created_at' or key == 'updated_at':
+                    # Set the created_at and updated_at attributes
                     setattr(self, key, datetime.strptime(
                         value, '%Y-%m-%dT%H:%M:%S.%f'))
                 elif key != '__class__':
                     setattr(self, key, value)
         else:
-            self.id = str(uuid.uuid4())  # Generate a unique ID using uuid4 and convert to a string
+            self.id = str(uuid.uuid4())  # unique ID using uuid4 to str
             self.created_at = self.updated_at = datetime.now()
 
     def __str__(self):
@@ -63,6 +64,6 @@ class BaseModel:
         """Find instances that match the given criteria."""
         return models.storage.find(cls, **kwargs)
 
+
 if __name__ == "__main__":
     pass
-
