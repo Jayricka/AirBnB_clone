@@ -47,3 +47,43 @@ class FileStorage:
             data[key] = value.to_dict()
         with open(FileStorage.__file_path, 'w') as f:
             json.dump(data, f)
+
+    def classes(self):
+        """Return a dictionary of class names and their corresponding classes"""
+        return FileStorage.__objects
+
+    def all(self, cls=None):
+        """Return a dictionary of objects of a specific class or all classes"""
+        if cls is None:
+            return FileStorage.__objects
+        else:
+            return {key: obj for key, obj in FileStorage.__objects.items() if isinstance(obj, cls)}
+
+    def count(self, cls=None):
+        """Return the count of objects of a specific class or all classes"""
+        if cls is None:
+            return len(FileStorage.__objects)
+        else:
+            return len(self.all(cls))
+
+    def show(self, cls, id):
+        """Return the object with the given ID from a specific class"""
+        key = "{}.{}".format(cls, id)
+        return FileStorage.__objects.get(key, None)
+
+    def destroy(self, cls, id):
+        """Delete an object with the given ID from a specific class"""
+        key = "{}.{}".format(cls, id)
+        obj = FileStorage.__objects.get(key, None)
+        if obj:
+            del FileStorage.__objects[key]
+            self.save()
+
+    def update(self, cls, id, attr_name, attr_value):
+        """Update an object's attribute with the given value"""
+        key = "{}.{}".format(cls, id)
+        obj = FileStorage.__objects.get(key, None)
+        if obj:
+            setattr(obj, attr_name, attr_value)
+            self.save()
+
