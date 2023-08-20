@@ -1,69 +1,44 @@
 #!/usr/bin/python3
-"""This module defines the BaseModel class."""
+"""BaseModel module."""
 import uuid
 from datetime import datetime
-import models
-
 
 class BaseModel:
-    """This class defines common attributes/methods for other classes."""
+    """Defines the BaseModel class."""
 
     def __init__(self, *args, **kwargs):
-        """Initialize the BaseModel instance."""
+        """Initialize a new instance of BaseModel."""
         if kwargs:
             for key, value in kwargs.items():
                 if key == 'created_at' or key == 'updated_at':
-                    # Set the created_at and updated_at attributes
-                    setattr(self, key, datetime.strptime(
-                        value, '%Y-%m-%dT%H:%M:%S.%f'))
-                elif key != '__class__':
+                    value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                if key != '__class__':
                     setattr(self, key, value)
-        else:
-            self.id = str(uuid.uuid4())  # unique ID using uuid4 to str
-            self.created_at = self.updated_at = datetime.now()
+            return
 
-    def __str__(self):
-        """Return a string representation of the BaseModel instance."""
-        return "[{}] ({}) {}".format(
-            self.__class__.__name__, self.id, self.__dict__)
-
-    def to_dict(self):
-        """Return a dictionary representation of the BaseModel instance."""
-        obj_dict = self.__dict__.copy()
-        obj_dict['__class__'] = self.__class__.__name__
-        obj_dict['created_at'] = self.created_at.isoformat()
-        obj_dict['updated_at'] = self.updated_at.isoformat()
-        return obj_dict
+        self.id = str(uuid.uuid4())
+        self.created_at = self.updated_at = datetime.now()
 
     def save(self):
-        """Save the current instance's data to the storage engine."""
-        models.storage.new(self)
-        models.storage.save()
+        """Update the updated_at attribute and save to the storage engine."""
+        self.updated_at = datetime.now()
+        from models import storage
+        storage.new(self)
+        storage.save()
 
-    def delete(self):
-        """Remove the current instance's data from the storage engine."""
-        models.storage.delete(self)
+    def to_dict(self):
+        """Return a dictionary representation of the object."""
+        data = dict(self.__dict__)
+        data['__class__'] = self.__class__.__name__
+        data['created_at'] = self.created_at.isoformat()
+        data['updated_at'] = self.updated_at.isoformat()
+        return data
 
-    @classmethod
-    def all(cls):
-        """Return a dictionary of all instances."""
-        return models.storage.all(cls)
+    def __str__(self):
+        """Return a string representation of the object."""
+        return "[{}] ({}) {}".format(
+            self.__class__.__name__,
+            self.id,
+            self.__dict__
+        )
 
-    @classmethod
-    def count(cls):
-        """Return the number of instances in storage."""
-        return models.storage.count(cls)
-
-    @classmethod
-    def find_by_id(cls, id):
-        """Find an instance by its ID."""
-        return models.storage.find(cls, id)
-
-    @classmethod
-    def find(cls, **kwargs):
-        """Find instances that match the given criteria."""
-        return models.storage.find(cls, **kwargs)
-
-
-if __name__ == "__main__":
-    pass

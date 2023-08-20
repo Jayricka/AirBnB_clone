@@ -1,9 +1,20 @@
 #!/usr/bin/python3
-"""This module initializes the FileStorage instance."""
+"""This module contains the initialization for the models package."""
+
 from models.engine.file_storage import FileStorage
 
-# Create a global FileStorage instance
 storage = FileStorage()
-
-# Load objects from the JSON file, if it exists
 storage.reload()
+
+# Import your classes here
+from models.base_model import BaseModel
+from models.user import User
+# Add more imports for other classes
+
+# Create a dictionary of class names to classes
+classes = {
+    "BaseModel": BaseModel,
+    "User": User,
+    # Add more entries for other classes
+}
+
