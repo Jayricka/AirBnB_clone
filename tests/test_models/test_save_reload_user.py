@@ -1,8 +1,18 @@
 #!/usr/bin/python3
+import sys
+import os
+
+# Get the current directory of the script
+current_dir = os.path.dirname(os.path.realpath(__file__))
+
+# Add the project root directory to sys.path
+project_root = os.path.abspath(os.path.join(current_dir, "../../"))
+sys.path.append(project_root)
+
 from models import storage
-from models.base_model import BaseModel
 from models.user import User
 
+# Retrieve all objects from storage
 all_objs = storage.all()
 print("-- Reloaded objects --")
 for obj_id in all_objs.keys():
