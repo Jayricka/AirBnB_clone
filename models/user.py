@@ -17,3 +17,7 @@ class User(BaseModel):
     password = ""
     first_name = ""
     last_name = ""
+
+    def __str__(self):
+        """String representation of User instance"""
+        return "[User] ({}) {}".format(self.id, self.to_dict())

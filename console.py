@@ -2,6 +2,13 @@
 """This is the entry point of the command interpreter."""
 import cmd
 import models
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 class HBNBCommand(cmd.Cmd):
     """Cmd class for the command interpreter."""
@@ -119,5 +126,14 @@ class HBNBCommand(cmd.Cmd):
                     setattr(instance, attr_name, attr_value)
                     instance.save()
 
+    def do_count(self, arg):
+        """Count the number of User instances."""
+        if arg != "User":
+            print("** class doesn't exist **")
+        else:
+            count = len([obj for obj in models.storage.all().values() if isinstance(obj, User)])
+            print(count)
+
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
+
